@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:cine_app/config/helpers/human_formats.dart';
 import 'package:cine_app/domain/entities/movie.dart';
-import 'package:flutter/material.dart';
 
 class MovieHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
@@ -54,7 +54,7 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
           itemCount: widget.movies.length,
           physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) {
-            return _Slide(movie: widget.movies[index]);
+            return FadeInRight(child: _Slide(movie: widget.movies[index]));
           },
         ))
       ]),
