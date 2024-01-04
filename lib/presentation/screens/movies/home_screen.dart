@@ -1,3 +1,4 @@
+import 'package:cine_app/config/helpers/day_format.dart';
 import 'package:flutter/material.dart';
 import 'package:cine_app/presentation/providers/providers.dart';
 import 'package:cine_app/presentation/widgets/widgets.dart';
@@ -37,22 +38,49 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProviders);
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
 
-    return Column(
-      children: [
-        const CustomAppbar(),
-        MoviesSlideshow(movies: slideShowMovies),
-        MovieHorizontalListview(
-          label: 'En cines',
-          subLabel: 'Lunes 20',
-          movies: nowPlayingMovies,
-          loadNextPage: () {
-            ref.read(nowPlayingMoviesProviders.notifier).loadNextPage();
-          },
+    return CustomScrollView(slivers: [
+      const SliverAppBar(
+        automaticallyImplyLeading: false,
+        floating: true,
+        flexibleSpace: FlexibleSpaceBar(
+          title: CustomAppbar(),
         ),
-        MovieHorizontalListview(
-          movies: slideShowMovies,
-        ),
-      ],
-    );
+      ),
+      SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+        return Column(
+          children: [
+            MoviesSlideshow(movies: slideShowMovies),
+            MovieHorizontalListview(
+              label: 'In theaters',
+              subLabel: DayFormat.getDay(DateTime.now()),
+              movies: nowPlayingMovies,
+              loadNextPage: () {
+                ref.read(nowPlayingMoviesProviders.notifier).loadNextPage();
+              },
+            ),
+            MovieHorizontalListview(
+              label: 'This month',
+              movies: slideShowMovies,
+            ),
+            MovieHorizontalListview(
+              label: 'Popular',
+              movies: slideShowMovies,
+            ),
+            MovieHorizontalListview(
+              label: 'Soon',
+              movies: slideShowMovies,
+            ),
+            MovieHorizontalListview(
+              label: 'Best rated',
+              movies: slideShowMovies,
+            ),
+            const SizedBox(
+              height: 10,
+            )
+          ],
+        );
+      }, childCount: 1))
+    ]);
   }
 }

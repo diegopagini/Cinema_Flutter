@@ -13,15 +13,22 @@ typedef MovieCallback = Future<List<Movie>> Function({int page});
 
 class MoviesNotifier extends StateNotifier<List<Movie>> {
   int currentPage = 0;
+  bool isLoading = false;
   MovieCallback fetchMoreMovies;
 
   MoviesNotifier({required this.fetchMoreMovies}) : super([]);
 
   Future<void> loadNextPage() async {
+    if (isLoading) return;
+    // To avoid multiple requests
+    isLoading = true;
     currentPage++;
-
     final List<Movie> movies = await fetchMoreMovies(page: currentPage);
     // state.addAll(movies); this is not recomended, we need to return a new state.
     state = [...state, ...movies]; // This way riverpod notifies the change.
+
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    isLoading = false;
   }
 }
