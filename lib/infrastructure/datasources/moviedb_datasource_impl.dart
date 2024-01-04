@@ -10,13 +10,13 @@ class MoviedbDatasourceImpl extends MoviesDatasource {
       baseUrl: 'https://api.themoviedb.org/3',
       queryParameters: {
         'api_key': Environment.theMovieDbKey,
-        'language': 'en-gb'
+        'language': 'es-ES'
       }));
 
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
     // Get response from http.
-    final response = await dio.get('/movie/now_playing&page=$page');
+    final response = await dio.get('/movie/now_playing');
     // Transform that json response into a map.
     final movieDBReponse = MovieDBResponse.fromJson(response.data);
     // Transform that map into one with the structure that we want.
@@ -25,6 +25,7 @@ class MoviedbDatasourceImpl extends MoviesDatasource {
         .where((moviedb) => moviedb.posterPath != 'no-poster')
         .map((moviedb) => MovieMapper.movieDBToEntity(moviedb))
         .toList();
+
     // Return that data.
     return movies;
   }
