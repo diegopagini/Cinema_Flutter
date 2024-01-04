@@ -21,9 +21,9 @@ final upcomingMoviesProvider =
   return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
 });
 
-final topRatingMoviesProvider =
+final topRatedMoviesProvider =
     StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
-  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getUpcoming;
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).topRated;
   return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
 });
 

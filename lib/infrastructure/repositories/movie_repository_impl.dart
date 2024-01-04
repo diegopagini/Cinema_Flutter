@@ -24,7 +24,7 @@ class MovieRepositoryImpl extends MoviesRepository {
   }
 
   @override
-  Future<List<Movie>> topRating({int page = 1}) {
-    return datasource.topRating(page: page);
+  Future<List<Movie>> topRated({int page = 1}) {
+    return datasource.topRated(page: page);
   }
 }

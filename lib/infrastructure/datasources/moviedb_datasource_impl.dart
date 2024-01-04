@@ -58,9 +58,9 @@ class MoviedbDatasourceImpl extends MoviesDatasource {
   }
 
   @override
-  Future<List<Movie>> topRating({int page = 1}) async {
+  Future<List<Movie>> topRated({int page = 1}) async {
     final response =
-        await dio.get('/movie/top_rating', queryParameters: {'page': page});
+        await dio.get('/movie/top_rated', queryParameters: {'page': page});
 
     return _jsonToMovies(response.data);
   }
