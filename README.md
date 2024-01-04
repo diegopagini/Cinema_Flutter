@@ -2,7 +2,7 @@
 
 # cine_app
 
-![image](https://github.com/diegopagini/Cinema_Flutter/assets/62857778/1a0c5e88-43e7-4d11-be21-7d5f2d95067d)
+![image](https://github.com/diegopagini/Cinema_Flutter/assets/62857778/0e137298-9dee-4412-ba5b-4a590a738a08)
 
 ---
 
