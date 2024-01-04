@@ -13,6 +13,16 @@ class MoviedbDatasourceImpl extends MoviesDatasource {
         'language': 'es-ES'
       }));
 
+  List<Movie> _jsonToMovies(Map<String, dynamic> json) {
+    final movieDBReponse = MovieDBResponse.fromJson(json);
+    final List<Movie> movies = movieDBReponse.results
+        .where((moviedb) => moviedb.posterPath != 'no-poster')
+        .map((moviedb) => MovieMapper.movieDBToEntity(moviedb))
+        .toList();
+
+    return movies;
+  }
+
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
     // Get response from http.
@@ -29,5 +39,13 @@ class MoviedbDatasourceImpl extends MoviesDatasource {
 
     // Return that data.
     return movies;
+  }
+
+  @override
+  Future<List<Movie>> getPopular({int page = 1}) async {
+    final response =
+        await dio.get('/movie/popular', queryParameters: {'page': page});
+
+    return _jsonToMovies(response.data);
   }
 }
