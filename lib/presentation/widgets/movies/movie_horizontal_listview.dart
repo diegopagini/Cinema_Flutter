@@ -3,7 +3,7 @@ import 'package:cine_app/config/helpers/human_formats.dart';
 import 'package:cine_app/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 
-class MovieHorizontalListview extends StatelessWidget {
+class MovieHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
   final String? label;
   final String? subLabel;
@@ -17,26 +17,54 @@ class MovieHorizontalListview extends StatelessWidget {
       this.loadNextPage});
 
   @override
+  State<MovieHorizontalListview> createState() =>
+      _MovieHorizontalListviewState();
+}
+
+class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
+  final scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(() {
+      if (widget.loadNextPage == null) return;
+
+      if (scrollController.position.pixels + 200 >=
+          scrollController.position.maxScrollExtent) {
+        widget.loadNextPage!();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 350,
       child: Column(children: [
-        if (label != null || subLabel != null)
+        if (widget.label != null || widget.subLabel != null)
           _Title(
-            title: label,
-            subTitle: subLabel,
+            title: widget.label,
+            subTitle: widget.subLabel,
           ),
         Expanded(
             child: ListView.builder(
+          controller: scrollController,
           scrollDirection: Axis.horizontal,
-          itemCount: movies.length,
+          itemCount: widget.movies.length,
           physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) {
-            return _Slide(movie: movies[index]);
+            return _Slide(movie: widget.movies[index]);
           },
         ))
       ]),
     );
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 }
 
@@ -118,25 +146,29 @@ class _Slide extends StatelessWidget {
             movie.title,
             maxLines: 2,
             style: textStyle.titleSmall,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
 
         // RATING
-        Row(
-          children: [
-            Icon(Icons.star_half_outlined, color: Colors.yellow.shade800),
-            const SizedBox(width: 5),
-            Text(
-              HumanFormats.humanRedableNumber(movie.voteAverage),
-              style:
-                  textStyle.bodyMedium?.copyWith(color: Colors.yellow.shade900),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              HumanFormats.humanRedableNumber(movie.popularity),
-              style: textStyle.bodySmall,
-            )
-          ],
+        SizedBox(
+          width: 150,
+          child: Row(
+            children: [
+              Icon(Icons.star_half_outlined, color: Colors.yellow.shade800),
+              const SizedBox(width: 5),
+              Text(
+                HumanFormats.humanRedableNumber(movie.voteAverage),
+                style: textStyle.bodyMedium
+                    ?.copyWith(color: Colors.yellow.shade900),
+              ),
+              const Spacer(),
+              Text(
+                HumanFormats.humanRedableNumber(movie.popularity),
+                style: textStyle.bodySmall,
+              )
+            ],
+          ),
         )
       ]),
     );

@@ -45,6 +45,9 @@ class _HomeViewState extends ConsumerState<_HomeView> {
           label: 'En cines',
           subLabel: 'Lunes 20',
           movies: nowPlayingMovies,
+          loadNextPage: () {
+            ref.read(nowPlayingMoviesProviders.notifier).loadNextPage();
+          },
         ),
         MovieHorizontalListview(
           movies: slideShowMovies,

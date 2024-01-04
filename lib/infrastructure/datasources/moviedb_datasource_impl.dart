@@ -16,7 +16,8 @@ class MoviedbDatasourceImpl extends MoviesDatasource {
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
     // Get response from http.
-    final response = await dio.get('/movie/now_playing');
+    final response =
+        await dio.get('/movie/now_playing', queryParameters: {'page': page});
     // Transform that json response into a map.
     final movieDBReponse = MovieDBResponse.fromJson(response.data);
     // Transform that map into one with the structure that we want.
