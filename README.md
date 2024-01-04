@@ -11,3 +11,5 @@
 
 1. Copiar .env.template y renombrar a .env
 2. Cambiar variables de entorno
+
+
