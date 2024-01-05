@@ -13,8 +13,9 @@ typedef GetMovieCallback = Future<Movie> Function({required String id});
 
 /// Example of the state:
 /// {
-///   54532: {},
-///   54533: {}
+///   54532: Movie(),
+///   54533: Movie(),
+///   54567: Movie(),
 /// }
 ///
 class MovieMapNotifier extends StateNotifier<Map<String, Movie>> {
