@@ -4,6 +4,7 @@ import 'package:cine_app/infrastructure/models/moviedb/movie_db_response.dart';
 import 'package:cine_app/config/constants/environment.dart';
 import 'package:cine_app/domain/entities/movie.dart';
 import 'package:cine_app/domain/datasources/movies_datasource.dart';
+import 'package:cine_app/infrastructure/models/moviedb/movie_details.dart';
 
 class MoviedbDatasourceImpl extends MoviesDatasource {
   final dio = Dio(BaseOptions(
@@ -63,5 +64,20 @@ class MoviedbDatasourceImpl extends MoviesDatasource {
         await dio.get('/movie/top_rated', queryParameters: {'page': page});
 
     return _jsonToMovies(response.data);
+  }
+
+  @override
+  Future<Movie> getMovieById({required String id}) async {
+    final response = await dio.get('/movie/$id');
+
+    if (response.statusCode != 200) {
+      throw Exception('Movie with id: $id not found');
+    }
+
+    final movieDetails = MovieDetails.fromJson(response.data);
+
+    final Movie movie = MovieMapper.movieDetailsToEntity(movieDetails);
+
+    return movie;
   }
 }
