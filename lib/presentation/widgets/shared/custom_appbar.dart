@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cine_app/presentation/delegates/search_movie_delegate.dart';
 
 class CustomAppbar extends StatelessWidget {
   const CustomAppbar({super.key});
@@ -28,7 +29,12 @@ class CustomAppbar extends StatelessWidget {
                     style: titleStyle,
                   ),
                   const Spacer(), // This is like flex 1 1
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.search))
+                  IconButton(
+                      onPressed: () {
+                        showSearch(
+                            context: context, delegate: SearchMovieDelegate());
+                      },
+                      icon: const Icon(Icons.search))
                 ],
               )),
         ));
