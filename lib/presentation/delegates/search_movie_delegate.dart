@@ -1,16 +1,28 @@
-import 'package:cine_app/config/helpers/human_formats.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:animate_do/animate_do.dart';
-import 'package:cine_app/domain/entities/movie.dart';
 import 'package:go_router/go_router.dart';
+import 'package:animate_do/animate_do.dart';
+import 'package:cine_app/config/helpers/human_formats.dart';
+import 'package:cine_app/domain/entities/movie.dart';
 
 typedef SearchMoviesCallback = Future<List<Movie>> Function(
     {required String movie});
 
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
   final SearchMoviesCallback searchMovies;
+  StreamController<List<Movie>> debounceMovies =
+      StreamController.broadcast(); // Broadcast to emit to more than one place
+  Timer? _debounceTimer;
 
   SearchMovieDelegate({required this.searchMovies});
+
+  void _onQueryChanged(String query) {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      // TODO: Search movie
+    });
+  }
 
   @override
   String get searchFieldLabel => 'Search Movie';
@@ -39,8 +51,10 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return FutureBuilder(
-      future: searchMovies(movie: query),
+    _onQueryChanged(query);
+
+    return StreamBuilder(
+      stream: debounceMovies.stream,
       builder: (context, snapshot) {
         final movies = snapshot.data ?? [];
 
