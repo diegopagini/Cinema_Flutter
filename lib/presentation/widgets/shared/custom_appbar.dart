@@ -1,3 +1,4 @@
+import 'package:cine_app/domain/entities/movie.dart';
 import 'package:cine_app/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:cine_app/presentation/delegates/search_movie_delegate.dart';
@@ -36,7 +37,7 @@ class CustomAppbar extends ConsumerWidget {
                         final movieRepository =
                             ref.read(movieRepositoryProvider);
 
-                        showSearch(
+                        showSearch<Movie?>(
                             context: context,
                             delegate: SearchMovieDelegate(
                                 searchMovies: movieRepository.getMoviesByTerm));
