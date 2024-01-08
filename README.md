@@ -6,6 +6,14 @@
 ![image](https://github.com/diegopagini/Cinema_Flutter/assets/62857778/6c4fec2b-f6d1-4725-9f92-b028a4f41a08)
 
 
+
+
+
+
+
+
+
+
 ---
 
 - Entidades son atómicas.
