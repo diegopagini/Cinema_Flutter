@@ -11,17 +11,29 @@ typedef SearchMoviesCallback = Future<List<Movie>> Function(
 
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
   final SearchMoviesCallback searchMovies;
+  final List<Movie> initialMovies;
   StreamController<List<Movie>> debounceMovies =
       StreamController.broadcast(); // Broadcast to emit to more than one place
   Timer? _debounceTimer;
 
-  SearchMovieDelegate({required this.searchMovies});
+  SearchMovieDelegate(
+      {required this.searchMovies, required this.initialMovies});
 
   void _onQueryChanged(String query) {
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
-    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-      // TODO: Search movie
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
+      // if (query.isEmpty) {
+      //   debounceMovies.add([]);
+      //   return;
+      // }
+
+      final movies = await searchMovies(movie: query);
+      debounceMovies.add(movies);
     });
+  }
+
+  void clearStreams() {
+    debounceMovies.close();
   }
 
   @override
@@ -40,7 +52,10 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-        onPressed: () => close(context, null),
+        onPressed: () {
+          clearStreams(); // To clear the observables.
+          close(context, null);
+        },
         icon: const Icon(Icons.arrow_back_ios_new_rounded));
   }
 
@@ -54,6 +69,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     _onQueryChanged(query);
 
     return StreamBuilder(
+      initialData: initialMovies,
       stream: debounceMovies.stream,
       builder: (context, snapshot) {
         final movies = snapshot.data ?? [];
@@ -64,7 +80,10 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
             final movie = movies[index];
             return _MovieSearchItem(
               movie: movie,
-              onMovieSelected: close,
+              onMovieSelected: (context, movie) {
+                clearStreams();
+                close(context, movie);
+              },
             );
           },
         );

@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:cine_app/domain/entities/movie.dart';
 import 'package:cine_app/presentation/providers/providers.dart';
-import 'package:flutter/material.dart';
 import 'package:cine_app/presentation/delegates/search_movie_delegate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomAppbar extends ConsumerWidget {
   const CustomAppbar({super.key});
@@ -34,13 +35,21 @@ class CustomAppbar extends ConsumerWidget {
                   const Spacer(), // This is like flex 1 1
                   IconButton(
                       onPressed: () {
-                        final movieRepository =
-                            ref.read(movieRepositoryProvider);
+                        final searchedMovies = ref.read(searchedMoviesProvider);
+                        final searchQuery = ref.read(searchQueryProvider);
 
                         showSearch<Movie?>(
-                            context: context,
-                            delegate: SearchMovieDelegate(
-                                searchMovies: movieRepository.getMoviesByTerm));
+                                query: searchQuery,
+                                context: context,
+                                delegate: SearchMovieDelegate(
+                                    initialMovies: searchedMovies,
+                                    searchMovies: ref
+                                        .read(searchedMoviesProvider.notifier)
+                                        .searchMoviesByQuery))
+                            .then((value) {
+                          if (value == null) return;
+                          context.push('/movie/${value.id}');
+                        });
                       },
                       icon: const Icon(Icons.search))
                 ],

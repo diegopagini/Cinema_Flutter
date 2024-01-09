@@ -83,6 +83,8 @@ class MoviedbDatasourceImpl extends MoviesDatasource {
 
   @override
   Future<List<Movie>> getMoviesByTerm({required String movie}) async {
+    if (movie.isEmpty) return [];
+
     final response =
         await dio.get('/search/movie', queryParameters: {'query': movie});
 
