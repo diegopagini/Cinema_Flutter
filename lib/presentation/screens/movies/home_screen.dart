@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:cine_app/presentation/views/movies/categories_view.dart';
 import 'package:cine_app/presentation/views/movies/favotires_view.dart';
-import 'package:flutter/material.dart';
 import 'package:cine_app/presentation/views/movies/home_view.dart';
 import 'package:cine_app/presentation/widgets/widgets.dart';
 
