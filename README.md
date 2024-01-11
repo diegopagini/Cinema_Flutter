@@ -4,7 +4,7 @@
 
 ![image](https://github.com/diegopagini/Cinema_Flutter/assets/62857778/ef5fb4b5-13bf-42cc-8e1f-6fd957a0c46a)
 ![image](https://github.com/diegopagini/Cinema_Flutter/assets/62857778/6c4fec2b-f6d1-4725-9f92-b028a4f41a08)
-![image](https://github.com/diegopagini/Cinema_Flutter/assets/62857778/d2a38686-1bf2-4b4c-9047-5e43166f8358)
+![image](https://github.com/diegopagini/Cinema_Flutter/assets/62857778/dc95c04d-4451-4eb0-b773-c1bd2dd68853)
 
 
 ---
