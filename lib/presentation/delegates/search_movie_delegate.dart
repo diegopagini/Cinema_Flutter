@@ -104,7 +104,7 @@ class _MovieSearchItem extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return GestureDetector(
-      onTap: () => context.go('/movie/${movie.id}'),
+      onTap: () => context.go('/home/0/movie/${movie.id}'),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Row(
