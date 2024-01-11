@@ -5,7 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class MovieMansonry extends StatefulWidget {
   final List<Movie> movies;
-  final VoidCallbackAction? loadNextPage;
+  final VoidCallback? loadNextPage;
 
   const MovieMansonry({super.key, required this.movies, this.loadNextPage});
 
@@ -14,9 +14,20 @@ class MovieMansonry extends StatefulWidget {
 }
 
 class _MovieMansonryState extends State<MovieMansonry> {
+  final scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
+    scrollController.addListener(() {
+      // Listener created
+      if (widget.loadNextPage == null) return;
+
+      if (scrollController.position.pixels + 100 >=
+          scrollController.position.maxScrollExtent) {
+        widget.loadNextPage!();
+      }
+    });
   }
 
   @override
@@ -24,6 +35,7 @@ class _MovieMansonryState extends State<MovieMansonry> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: MasonryGridView.count(
+        controller: scrollController,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
         crossAxisCount: 3,
@@ -48,6 +60,7 @@ class _MovieMansonryState extends State<MovieMansonry> {
 
   @override
   void dispose() {
+    scrollController.dispose(); // Listener disposed
     super.dispose();
   }
 }
